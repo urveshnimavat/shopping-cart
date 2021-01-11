@@ -11,6 +11,11 @@ Created using Node Js, Express, MongoDB
 * Mongoose
 * JWT
 * bcryptjs
+* multer
+* sharp
+* jsonwebtoken
+* dotenv
+* validator
 
 For Request and Response i have used Postman.
 
