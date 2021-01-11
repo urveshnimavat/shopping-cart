@@ -9,7 +9,6 @@ Created using Node Js, Express, MongoDB
 
 * Express
 * Mongoose
-* JWT
 * bcryptjs
 * multer
 * sharp
