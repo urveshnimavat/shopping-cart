@@ -1,4 +1,4 @@
-# shooping-cart
+# shopping-cart
 
 It's a complete working Node Js project. In which I have used Express Js and MongoDB.
 
