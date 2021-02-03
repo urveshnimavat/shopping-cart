@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
 const cartRouter = require("./routes/cart");
@@ -7,11 +8,11 @@ require("dotenv").config();
 
 const port = process.env.PORT;
 
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use("/users", userRouter);
 app.use("/products", productRouter);
 app.use("/cart", cartRouter);
-app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
     res.send("welcome to homepage");

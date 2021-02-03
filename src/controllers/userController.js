@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const sharp = require("sharp");
+const jwt = require('jsonwebtoken');
 const responseHelper = require("../helpers/responseHelper");
 
 //create new user
@@ -29,6 +30,43 @@ exports.loginUser = async (req, res) => {
         });
     } catch (err) {
         return responseHelper.error(res, "Login failed", 400, err);
+    }
+};
+//forgot password
+exports.forgotPassword = async(req,res) =>{
+    const email = req.body.email;
+    try{
+        const user = await User.findOne({email});
+        if(!user) return responseHelper.error(res, "User not found!", 400, "Email does not exists!");
+
+        const resetToken = jwt.sign({_id:user._id}, process.env.RESET_PASSWORD_TOKEN_KEY, {expiresIn:'20m'});
+        
+        await user.updateOne({resetLink:resetToken});
+        
+        return responseHelper.successapi(res, "reset token generated!", 200, resetToken);
+    }
+    catch(e){
+        return responseHelper.error(res, "error occured!", 400, "Error in generating reset token!");
+    }
+};
+//reset password
+exports.resetPassword = async(req,res)=>{
+    const resetToken = req.body.resetToken;
+    if(!resetToken) return responseHelper.error(res, "reset token not found!", 400, "Please provide reset token!");
+    const newPassword = req.body.newPassword;
+    if(!newPassword) return responseHelper.error(res, "new password not found!", 400, "Please provide new password!");
+
+    try{
+        const decoded = await jwt.verify(resetToken, process.env.RESET_PASSWORD_TOKEN_KEY);
+        if(!decoded) return responseHelper.error(res, "error!", 401, "Reset token wrong or expired!");
+
+        const user = await User.findOne({resetLink:resetToken});
+        user.password = newPassword;
+        await user.save();
+        return responseHelper.successapi(res, "updated!", 202, "Password updated successfully!");
+    }
+    catch(e){
+        return responseHelper.error(res, "Authentication Error!", 400, "Authentication error, please try again!");
     }
 };
 

@@ -42,6 +42,9 @@ const userSchema = new mongoose.Schema({
     ],
     avatar: {
         type: Buffer
+    },
+    resetLink:{
+        type:String,
     }
 },{
     timestamps: true

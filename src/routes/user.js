@@ -11,6 +11,8 @@ const {
     deleteUserById,
     uploadAvatar,
     viewAvatar,
+    forgotPassword,
+    resetPassword
 } = require("../controllers/userController");
 
 const upload = multer({
@@ -29,6 +31,8 @@ const upload = multer({
 router.post("/createUser", createUser);
 router.post("/login", loginUser);
 router.post("/logout", auth, logoutUser);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 router.get("/get-all-users", getAllUsers);
 router.patch("/updateUserById/:id", updateUserById);
 router.delete("/deleteUserById/:id", deleteUserById);
